@@ -1,6 +1,36 @@
-let app = angular.module("app", []);
+console.log("i will creating your app");
+let app = angular.module("app", ["ngRoute"]);
 
-app.controller("appController", ($scope) => {
+app.config(($routeProvider)=>{
+    $routeProvider.when("/",{
+        templateUrl:"assets/views/dynamic/home.html"
+    });
+    $routeProvider.when("/techtrends",{
+        templateUrl:"assets/views/dynamic/technologyTrends.html",
+        controller:"techTrendController"
+    });
+    $routeProvider.when("/register",{
+        templateUrl:"assets/views/static/registration.html",
+        controller:"registrationController"
+    });
+   
+});
+
+app.controller("registrationController",function($scope){
+
+    $scope.registerUser = ()=>{
+        let user = {
+            first_name:$scope.fname,
+            middle_name:$scope.mname,
+            last_name:$scope.lname,
+            address:$scope.address
+        }
+        console.log(JSON.stringify(user));
+    }
+
+});
+
+app.controller("techTrendController", function($scope){
 
     $scope.newResponse = [];
 

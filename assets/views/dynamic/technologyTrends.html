@@ -1,0 +1,22 @@
+<div id="technologyTrends">
+    {{message}}
+<table>
+    <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Likes</th>
+        <th>Dislikes</th>
+        <th>Your Response</th>
+    </tr>
+    <tr ng-repeat="technology in technologies">
+         <td>{{$index+1}}</td>
+         <td>{{technology.name}}</td>
+         <td>{{technology.likes}}</td>
+         <td>{{technology.dislikes}}</td>
+         <td>
+             <button ng-click="increaseLikes($index)" ng-disabled="(newResponse[$index] == 1) ? true : false">Like</button>
+             <button ng-click="increaseDislikes($index)" ng-disabled="(newResponse[$index] == -1) ? true : false">Dislike</button>
+         </td>
+    </tr>
+</table>
+</div>

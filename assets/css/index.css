@@ -67,3 +67,50 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+  button:disabled {
+  cursor: not-allowed;
+  }
+
+  input{
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+
+  input:focus{
+    background-color: #ddd;
+    outline: none;
+  }
+
+  .registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+
+  .registerbtn:hover {
+    opacity: 1;
+  }
+
+  hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+
+  .container {
+    padding: 16px;
+    background-color: white;
+  }
+
+  .signin {
+    background-color: #f1f1f1;
+    text-align: center;
+  }
