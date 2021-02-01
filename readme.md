@@ -8,3 +8,8 @@ ng-repeat $index - $parent.$index
 ng-init
 ng event hanglingm ng-click
 
+
+
+//plan right click
+
+1 include page by line by line

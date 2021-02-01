@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,30 +9,39 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
     <script src="./scripts/app.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
 </head>
+
 <body>
 
- <div class="roww">
-<div class="column header">
-<h1 class="headercontent">OLAPP</h1>
-</div>
-</div>
+    <div class="roww">
+        <div class="column header">
+            <h1 class="headercontent"> OLAPP</h1>
+        </div>
+    </div>
 
-<div class="roww">
-    <div class="column sidemenu">
-       <div ng-include="'./assets/views/static/sidemenu.html'"></div> 
+    <div class="roww">
+        <div class="column sidemenu">
+            <div ng-include="'./assets/views/static/sidemenu.html'"></div>
+        </div>
+        <div class="column content" id="cc">
+            <ng-view></ng-view>
+        </div>
     </div>
-    <div class="column content">
-      <ng-view></ng-view>
-    </div>
-</div>  
- 
- 
- <div class="roww">
-    <div class="column footer">
-    <h1 class="footercontent">I am footer</h1>
-    </div>
+
+
+    <div class="roww">
+        <div class="column footer">
+            <h1 class="footercontent">I am footer</h1>
+        </div>
     </div>
 
 </body>
+
 </html>

@@ -1,38 +1,72 @@
 console.log("i will creating your app");
 let app = angular.module("app", ["ngRoute"]);
 
-app.config(($routeProvider)=>{
-    $routeProvider.when("/",{
-        templateUrl:"assets/views/dynamic/home.html"
+app.config(($routeProvider) => {
+    $routeProvider.when("/", {
+        templateUrl: "assets/views/dynamic/home.html"
     });
-    $routeProvider.when("/techtrends",{
-        templateUrl:"assets/views/dynamic/technologyTrends.html",
-        controller:"techTrendController"
+    $routeProvider.when("/techtrends", {
+        templateUrl: "assets/views/dynamic/technologyTrends.html",
+        controller: "techTrendController"
     });
-    $routeProvider.when("/register",{
-        templateUrl:"assets/views/static/registration.html",
-        controller:"registrationController"
+    $routeProvider.when("/register", {
+        templateUrl: "assets/views/static/registration.html",
+        controller: "registrationController"
     });
-   
+    $routeProvider.when("/map", {
+        templateUrl: "assets/views/dynamic/map.html",
+        controller: "mapController"
+    });
+
+
 });
 
-app.controller("registrationController",function($scope){
+app.controller("mapController", function ($scope) {
+    console.log("i will load your map");
+    var mymap = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoicGFydmVlbm1hcCIsImEiOiJja2ttc2trdGwzYmNoMm9wYTdsNnZmYTdkIn0.I0PS604HIje1rmMpkHKTiQ'
+    }).addTo(mymap);
+    mymap.on('click', onMapClick);
+    L.rectangle([[3,4],[5,9]]).addTo(mymap);
+    function onMapClick(e) {
+        alert("You clicked the map at " + e.latlng);
+    }
+    
+})
 
-    $scope.registerUser = ()=>{
+app.controller("registrationController", function ($scope) {
+
+    $scope.registerUser = () => {
         let user = {
-            first_name:$scope.fname,
-            middle_name:$scope.mname,
-            last_name:$scope.lname,
-            address:$scope.address
+            first_name: $scope.fname,
+            middle_name: $scope.mname,
+            last_name: $scope.lname,
+            address: $scope.address
         }
         console.log(JSON.stringify(user));
     }
 
 });
 
-app.controller("techTrendController", function($scope){
-
+app.controller("techTrendController", function ($scope) {
+    $scope.showFormGreen = false;
     $scope.newResponse = [];
+
+    $scope.registerUser = () => {
+        let user = {
+            first_name: $scope.fname,
+            middle_name: $scope.mname,
+            last_name: $scope.lname,
+            address: $scope.address
+        }
+        console.log(JSON.stringify(user));
+    }
 
     $scope.technologies = [{
         name: "JavaScript",
@@ -81,6 +115,32 @@ app.controller("techTrendController", function($scope){
                 $scope.technologies[index].likes--;
             $scope.newResponse[index] = -1;
         }
+    }
+
+    let formGreen = document.getElementById("formGreen");
+
+    listMypage = (params) => {
+        console.log("I will try to route your request");
+
+        formGreen.style.display = "block";
+
+
+        window.onclick = function (event) {
+            if (event.target == formGreen) {
+                formGreen.style.display = "none";
+            }
+        }
+        // var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        /*span.onclick = function() {
+            modal.style.display = "none";
+          }*/
+
+    }
+
+    $scope.showOnMap = () => {
+        formGreen.style.display = "none";
     }
 
 });
