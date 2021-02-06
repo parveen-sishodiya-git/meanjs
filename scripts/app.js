@@ -17,11 +17,25 @@ app.config(($routeProvider) => {
         templateUrl: "assets/views/dynamic/map.html",
         controller: "mapController"
     });
+    $routeProvider.when("/chat", {
+        templateUrl: "assets/views/dynamic/chat.html",
+        controller: "chatController"
+    });
+    $routeProvider.when("/notifications", {
+        templateUrl: "assets/views/dynamic/notifications.html",
+        controller: "notificationController"
+    });
 
 
 });
 
 app.controller("mapController", function ($scope) {
+    let coords = [];
+    let rectDrawn = null;
+    let marker = null;
+    let markerIcon = null;
+    let mousedown = false;
+
     console.log("i will load your map");
     var mymap = L.map('map').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -32,12 +46,60 @@ app.controller("mapController", function ($scope) {
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoicGFydmVlbm1hcCIsImEiOiJja2ttc2trdGwzYmNoMm9wYTdsNnZmYTdkIn0.I0PS604HIje1rmMpkHKTiQ'
     }).addTo(mymap);
-    mymap.on('click', onMapClick);
-    L.rectangle([[3,4],[5,9]]).addTo(mymap);
+
+    mymap.on('mousedown', mouseDownOnMap);
+    mymap.on('mousemove', mouseMoveOnMap);
+    mymap.on('mouseup', mouseUpOnMap);
+
+    function mouseDownOnMap(down) {
+        mousedown = true;
+        coords[0] = down.latlng;
+        mymap.dragging.disable();
+    }
+
+    function mouseMoveOnMap(move) {
+        if (mousedown) {
+            coords[1] = move.latlng;
+            if (rectDrawn != null) {
+                mymap.removeLayer(rectDrawn);
+                mymap.removeLayer(marker);
+            }
+
+            rectDrawn = L.rectangle(coords, {
+            }).addTo(mymap);
+
+            markerIcon = L.icon({
+                iconUrl:'assets/img/icons/clear.png',
+                iconSize:[15,15]
+            });
+
+            marker = L.marker(coords[0],{icon:markerIcon}).addTo(mymap).on("click",()=>{
+                mymap.removeLayer(rectDrawn);
+                mymap.removeLayer(marker);     
+            });
+        }
+    }
+
+    function mouseUpOnMap(up) {
+        mousedown = false;
+    }
+
+    L.polyline([[68, -42], [48, 26]]).addTo(mymap);
     function onMapClick(e) {
         alert("You clicked the map at " + e.latlng);
     }
-    
+
+})
+
+app.controller("notificationController", function ($scope) {
+    $scope.title = "Notification Page";
+    $scope.myFunction = () => {
+        console.log("my function clicked");
+    }
+}).directive("formGreen", function () {
+    return {
+        templateUrl: 'assets/views/static/registration.html'
+    }
 })
 
 app.controller("registrationController", function ($scope) {
@@ -50,6 +112,31 @@ app.controller("registrationController", function ($scope) {
             address: $scope.address
         }
         console.log(JSON.stringify(user));
+    }
+
+});
+
+app.controller("chatController", function ($scope) {
+
+
+    $scope.page = {
+        fields: [{
+            id: "firstName",
+            label: "First Name",
+            inputType: "number",
+            placeHolder: "Enter your first name"
+        }, {
+            id: "lastName",
+            label: "Last Name",
+            inputType: "text",
+            placeHolder: "Enter your last name"
+        }]
+    };
+
+
+    generatePage = () => {
+        console.log("chat i will generate your page");
+
     }
 
 });
