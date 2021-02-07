@@ -34,7 +34,13 @@ app.controller("mapController", function ($scope) {
     let rectDrawn = null;
     let marker = null;
     let markerIcon = null;
+    let scoutPath = [];
+    let scoutPathLength;
+    let scoutDrawn = null;
+    
+    //mouse event
     let mousedown = false;
+    let clickTime = 0;
 
     console.log("i will load your map");
     var mymap = L.map('map').setView([51.505, -0.09], 13);
@@ -46,12 +52,80 @@ app.controller("mapController", function ($scope) {
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoicGFydmVlbm1hcCIsImEiOiJja2ttc2trdGwzYmNoMm9wYTdsNnZmYTdkIn0.I0PS604HIje1rmMpkHKTiQ'
     }).addTo(mymap);
-
-    mymap.on('mousedown', mouseDownOnMap);
+    
+    mymap.on('click', mouseDownOnMap);
     mymap.on('mousemove', mouseMoveOnMap);
     mymap.on('mouseup', mouseUpOnMap);
+    mymap.on('dblclick',mouseDblOnMap);
 
+    mymap.doubleClickZoom.disable();
+
+    L.rectangle([[51.53771659273237,-0.0418853759765625],[51.513793097655665,-0.16136169433593753]], {
+        color:'red',
+        fillColor:'transparent'
+    }).addTo(mymap);
+
+    //polyline creation
     function mouseDownOnMap(down) {
+        console.log("mouse is down DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ");
+        
+        mousedown = true;
+        mymap.dragging.disable();
+        
+        scoutPath.push(down.latlng);
+        scoutPathLength = scoutPath.length;
+
+        markerIcon = L.icon({
+            iconUrl:'assets/img/icons/clear.png',
+            iconSize:[15,15]
+        });
+
+        marker = L.marker(scoutPath[0],{icon:markerIcon}).addTo(mymap).on("click",()=>{
+            mymap.removeLayer(scoutDrawn);
+           
+        });
+        console.log("Array size "+scoutPath.length);
+        clickTime++;
+    }
+
+    function mouseMoveOnMap(move) {
+        if (mousedown) {
+            console.log("mouse is moving")
+            scoutPath[scoutPathLength] = (move.latlng);
+            if (scoutDrawn != null) {
+                mymap.removeLayer(scoutDrawn);
+            }
+
+            scoutDrawn = L.polyline(scoutPath, {
+                color:'red'
+            }).addTo(mymap);
+            clickTime = 0;
+        }
+    }
+
+    function mouseUpOnMap(up) {
+        console.log("mouse is up UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU ");
+       if(clickTime > 1){
+        createFinalScout();
+       }
+    }
+
+    function mouseDblOnMap(dbl) {
+        console.log("double clicked ::::::");
+        console.log("******");
+    }
+
+    function createFinalScout() {
+            console.log("created new scout*****");
+            mymap.removeLayer(scoutDrawn);
+            scoutDrawn = L.polyline(scoutPath, {
+                color:'red'
+            }).addTo(mymap);
+    }
+
+    //rectangle drawing
+    /*function mouseDownOnMap(down) {
+        console.log("mouse is down DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ");
         mousedown = true;
         coords[0] = down.latlng;
         mymap.dragging.disable();
@@ -59,6 +133,7 @@ app.controller("mapController", function ($scope) {
 
     function mouseMoveOnMap(move) {
         if (mousedown) {
+            console.log("mouse is moving")
             coords[1] = move.latlng;
             if (rectDrawn != null) {
                 mymap.removeLayer(rectDrawn);
@@ -66,6 +141,8 @@ app.controller("mapController", function ($scope) {
             }
 
             rectDrawn = L.rectangle(coords, {
+                color:'red',
+                fillColor:'transparent'
             }).addTo(mymap);
 
             markerIcon = L.icon({
@@ -81,8 +158,10 @@ app.controller("mapController", function ($scope) {
     }
 
     function mouseUpOnMap(up) {
+        console.log("mouse is up UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU ");
+        console.log(rectDrawn.getBounds());
         mousedown = false;
-    }
+    }*/
 
     L.polyline([[68, -42], [48, 26]]).addTo(mymap);
     function onMapClick(e) {
